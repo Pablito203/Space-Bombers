@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Space Bombers</title>
+    <style>
+        html, body {
+            height: 90%;
+            font-family: sans-serif;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        #loginModal{
+            width: 380px;
+            height: auto;
+            border: 1px solid black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 20px;
+        }
+        .botao {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            color: white;
+            width: 200px;
+            height: 60px;
+            border-radius: 100px;
+            margin-bottom: 10px;
+        }
+        .botao:hover {
+            cursor: pointer;
+        }
+        .dv100 {
+            width: 100%;
+        }
+        .formulario {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            height: 100%;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: flex-start;
+            height: 100%;
+            width: 100%;
+        }
+        form input {
+            margin-bottom: 15px;
+            margin-left: 10px;
+            width: 180px;
+            margin-right: 80px;
+            height: 20px;
+        }
+        label {
+            display: block;
+            text-align: right;
+            width: 70px;
+        }
+        .flex {
+            display: flex;
+            width: 100%;
+        }
+        a {
+            cursor: pointer;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .none {
+            display: none;
+        }
+        .erro {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div id="loginModal">
+            <h1>Space Bombers</h1>
+            <br>
+            <div id="entrarSala" class="formulario dv100">
+                <div style="margin-bottom: 20px;">
+                    <form method="post" action="/entrar">
+                        <div class="flex">
+                            <label for="txtNomeJogador">Nome *</label>
+                            <input type="text" class="txtNomeJogador" name="nomeJogador" maxlength="20">
+                        </div>
+                        <div class="flex">
+                            <label for="txtCodigoSala">Sala *</label>
+                            <input type="text" class="txtCodigoSala" name="codigoSala" maxlength="20">
+                        </div>
+                        <div class="none">
+                            <input type="submit" id="submitEntrar">
+                        </div>
+                    </form>
+                </div>
+                <span class="erro erroEntrar"></span>
+                <div class="botao" onclick="submitEntrar()">
+                    <span>Entrar</span>
+                </div>
+                <a onclick="trocaFormulario(1)">Criar sala</a>
+            </div>
+            <div id="criarSala" class="formulario dv100 none">
+                <div style="margin-bottom: 20px;">
+                    <form method="post" action="/criarSala">
+                        <div class="flex">
+                            <label for="txtNomeJogador">Nome *</label>
+                            <input type="text" class="txtNomeJogador" name="nomeJogador" maxlength="20">
+                        </div>
+                        <div class="flex">
+                            <label for="txtCodigoSala">Sala *</label>
+                            <input type="text" class="txtCodigoSala" name="codigoSala" maxlength="20">
+                        </div>
+                        <div class="none">
+                            <input type="submit" id="submitCriarSala">
+                        </div>
+                    </form>
+                </div>
+                <span class="erro erroCriar"></span>
+                <div class="botao" onclick="submitCriarSala()">
+                    <span>Criar sala</span>
+                </div>
+                <a onclick="trocaFormulario(0)">Entrar</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+
+        async function postFormCriar(body) {
+            const response = await fetch('/criarSala', {method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                 body: JSON.stringify(body)});
+            var data = await response.json();
+            return data;
+        }
+
+        async function postFormEntrar(body) {
+            const response = await fetch('/entrar', {method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body)});
+            var data = await response.json();
+            return data;
+        }
+
+        function submitEntrar() {
+            const nomeJogador = document.querySelector('#entrarSala .txtNomeJogador');
+            const codigoSala = document.querySelector('#entrarSala .txtCodigoSala');
+            const body = {nomeJogador: nomeJogador.value, codigoSala: codigoSala.value};
+            postFormEntrar(body).then((data) => {
+                if (data) {
+                    document.querySelector('.erroEntrar').innerHTML = data;
+                }
+            }).catch(() => {
+                window.location.href = '/jogo';
+                Promise.resolve('ok');
+            })
+        }
+
+        function submitCriarSala() {
+            const nomeJogador = document.querySelector('#criarSala .txtNomeJogador');
+            const codigoSala = document.querySelector('#criarSala .txtCodigoSala');
+            const body = {nomeJogador: nomeJogador.value, codigoSala: codigoSala.value};
+            postFormCriar(body).then((data) => {
+                if (data) {
+                    document.querySelector('.erroCriar').innerHTML = data;
+                }
+            }).catch(() => {
+                window.location.href = '/jogo';
+                Promise.resolve('ok');
+            })
+        }
+
+        function trocaFormulario(idFormulario) {
+            const criarSala = document.getElementById('criarSala');
+            const entrarSala = document.getElementById('entrarSala');
+
+            switch (idFormulario) {
+                case 0:
+                    entrarSala.classList = entrarSala.classList.value.replace('none', '');
+                    criarSala.classList.value += ' none';
+                    break;
+                case 1:
+                    criarSala.classList = criarSala.classList.value.replace('none', '');
+                    entrarSala.classList.value += ' none';
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>

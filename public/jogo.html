@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Space Bombers</title>
+    <style>
+        body {
+            overflow: hidden;
+            background-color: white;
+        }
+        #canvas {
+            display: block;
+            border: 1px solid black;
+            width: 57.4vw;
+            height: calc(57.4vw * 0.755);
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+    <canvas id="canvas" width="600" height="520"></canvas>
+
+
+    <script src="./keyboard-listener.js"></script>
+    <script src="./renderizar-tela.js"></script>
+    <script>
+        async function addJogador() {
+            const response = await fetch('/jogador', {method: "POST"});
+            var data = await response.json();
+            return data;
+        }
+
+        addJogador().then((jogadorID) => {
+            criarKeyboardListener(jogadorID);
+            iniciaJogo(jogadorID);
+        });
+    </script>
+    
+</body>
+</html>
