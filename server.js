@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const server = http.createServer(app);
+const porta = process.env.PORT || 3000;
 
 const salas = {}
 
@@ -208,6 +209,6 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname+"/public/index.html");
 })
 
-server.listen(3000, () => {
+server.listen(porta, () => {
     console.log('servidor rodando na porta 3000')
 });
