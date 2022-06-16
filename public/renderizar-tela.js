@@ -150,8 +150,6 @@ function renderizarTela(state) {
         context.textAlign = 'center';
         context.strokeText(jogador.nome, jogador.posicaoX + 32, jogador.posicaoY);
         context.fillText(jogador.nome, jogador.posicaoX + 32, jogador.posicaoY);
-        console.log('x', jogador.posicaoX);
-        console.log('y', jogador.posicaoY);
     }
 
     if (bombaIdsTrocaAnimacao.length > 0) {
