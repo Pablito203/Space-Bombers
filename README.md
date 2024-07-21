@@ -1,6 +1,6 @@
 # Space Bombers
 
-Jogo multiplayer inspirado no bomberman do super nintendo, desenvolvido para estudos de APIs em Node.js
+Jogo multiplayer inspirado no bomberman do super nintendo
 
 ## Tecnologias
 
